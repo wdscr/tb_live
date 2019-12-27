@@ -3,7 +3,6 @@ package com.example.tb_live_catch.service;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.example.tb_live_catch.util.BeetlUtil;
-import com.sun.org.apache.bcel.internal.generic.NEW;
 import org.apache.commons.codec.digest.DigestUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpHost;
@@ -18,37 +17,19 @@ import org.apache.http.impl.conn.DefaultProxyRoutePlanner;
 import org.apache.http.util.EntityUtils;
 import org.springframework.stereotype.Service;
 
-import java.io.*;
+import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 @Service
-public class TBWordAnalysisService {
-
-    private static final String PLAY_BACK_REGEX = "^videoUrl=.*\\.mp4$";
-
-    public String analysis(String tbWork) {
-
-        return "a original url";
-    }
-
-    public String playBackUrl(String originalUrl) {
-
-        Pattern pattern = Pattern.compile(PLAY_BACK_REGEX);
-
-        Matcher matcher = pattern.matcher(originalUrl);
-
-        if (matcher.find()) {
-            return matcher.group(0);
-        }
-        return null;
-    }
+public class LiveCatchService {
 
     public void liveCatch(String uri) throws IOException {
+
         URL url = new URL(uri);
         HttpURLConnection connection = (HttpURLConnection) url.openConnection();
         connection.setConnectTimeout(10000);
@@ -58,7 +39,6 @@ public class TBWordAnalysisService {
         if (connection.getResponseCode() != HttpURLConnection.HTTP_OK) {
             return;
         }
-
 
         BufferedInputStream bis = new BufferedInputStream(connection.getInputStream());
         BufferedOutputStream bos = new BufferedOutputStream(new FileOutputStream("C:\\Users\\Zzz\\Desktop\\test.flv"));
@@ -70,14 +50,12 @@ public class TBWordAnalysisService {
         bos.flush();
         bos.close();
         bis.close();
+
     }
 
     public String getLiveUri(String liveId) throws IOException {
-        HttpHost proxy = new HttpHost("127.0.0.1", 8888, "http");
-        DefaultProxyRoutePlanner routePlanner = new DefaultProxyRoutePlanner(proxy);
-
         CookieStore cookieStore = new BasicCookieStore();
-        HttpClient client = HttpClients.custom().setDefaultCookieStore(cookieStore).setRoutePlanner(routePlanner).build();
+        HttpClient client = HttpClients.custom().setDefaultCookieStore(cookieStore).build();
         Map<String, Object> map = new HashMap<>();
         map.put("timestamp", "0");
         map.put("sign", "0");
@@ -103,13 +81,10 @@ public class TBWordAnalysisService {
         HttpGet get1 = new HttpGet(url2);
         get1.setHeader("User-Agent", "Mozilla/5.0 (Windows NT 6.1; WOW64; rv:45.0) Gecko/20100101 Firefox/45.0");
         HttpResponse response = client.execute(get1);
-        cookies = cookieStore.getCookies();
-        System.out.println(cookies);
         HttpEntity httpEntity = response.getEntity();
         String responseStr = EntityUtils.toString(httpEntity);
 
         String jsonStr = responseStr.substring("mtopjsonp4(".length() + 1, responseStr.length()-1);
-
         JSONObject responseJson = JSONObject.parseObject(jsonStr);
         System.out.println(responseJson.toJSONString());
 
@@ -145,12 +120,7 @@ public class TBWordAnalysisService {
 
     public static void main(String[] args) {
         String sign = DigestUtils.md5Hex("00b8bde2b912d462da6c6913e9652a38&1577359735090" + "&" + APP_KEY + "&{\"liveId\":\"248941792164\"}");
-//        String sign = DigestUtils.md5Hex("1577340458410");
-
         System.out.println(sign);
-
     }
-
-
 
 }

@@ -1,0 +1,11 @@
+spring:
+  profiles:
+    active: ${ENV:dev}
+
+taokouling:
+  appkey: MXDTGTjRNW
+  api: https://api.taokouling.com/tkl/tkljm
+
+ffmpeg:
+  path: ${FFMPEG_PATH}
+  tmp-dir: ${FFMPEG_TMP_DIR}
