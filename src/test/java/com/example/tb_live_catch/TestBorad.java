@@ -20,7 +20,7 @@ public class TestBorad {
     @Test
     public void test() {
         try {
-            String sign = liveUriCatchService.getLiveUri("248941792164");
+            String sign = liveUriCatchService.getLiveUri("249658079503");
             System.out.println(sign);
         } catch (IOException e) {
             e.printStackTrace();
@@ -34,7 +34,7 @@ public class TestBorad {
 
     @Test
     public void test3() throws IOException {
-        System.out.println(taoKouLingAnalyzeService.analyzeToLiveId("￥1bbP10tNu5g￥"));
+        System.out.println(taoKouLingAnalyzeService.analyzeToLiveId("￥03v01bJXhg8￥"));
     }
 
 }
