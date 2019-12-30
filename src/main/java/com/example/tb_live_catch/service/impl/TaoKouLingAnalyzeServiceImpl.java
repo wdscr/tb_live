@@ -25,36 +25,40 @@ public class TaoKouLingAnalyzeServiceImpl implements TaoKouLingAnalyzeService {
     private String api;
 
     @Override
-    public String analyzeToLiveId(String tkl) throws IOException {
+    public String analyzeToLiveId(String tkl) {
 
-        CloseableHttpClient client = HttpClients.createDefault();
+        try {
+            CloseableHttpClient client = HttpClients.createDefault();
 
-        HttpPost post = new HttpPost(api);
+            HttpPost post = new HttpPost(api);
 
-        JSONObject param = new JSONObject();
-        param.put("apikey", appkey);
-        param.put("tkl", tkl);
-        String paramStr = param.toJSONString();
-        StringEntity postingString = new StringEntity(paramStr, "utf-8");
+            JSONObject param = new JSONObject();
+            param.put("apikey", appkey);
+            param.put("tkl", tkl);
+            String paramStr = param.toJSONString();
+            StringEntity postingString = new StringEntity(paramStr, "utf-8");
 
-        post.setEntity(postingString);
+            post.setEntity(postingString);
 
-        HttpResponse response = client.execute(post);
-        HttpEntity responseEntity = response.getEntity();
-        String responseJsonStr = EntityUtils.toString(responseEntity);
+            HttpResponse response = client.execute(post);
+            HttpEntity responseEntity = response.getEntity();
+            String responseJsonStr = EntityUtils.toString(responseEntity);
 
-        JSONObject responseJson = JSONObject.parseObject(responseJsonStr);
-        if (responseJson.getInteger("code") != null && responseJson.getInteger("code") == 1) {
-            String url = responseJson.getString("url");
-            int sidx = url.indexOf("?id=") + 4;
-            int eidx = sidx;
-            while (eidx < url.length()) {
-                if (url.charAt(eidx) == '&') {
-                    break;
+            JSONObject responseJson = JSONObject.parseObject(responseJsonStr);
+            if (responseJson.getInteger("code") != null && responseJson.getInteger("code") == 1) {
+                String url = responseJson.getString("url");
+                int sidx = url.indexOf("?id=") + 4;
+                int eidx = sidx;
+                while (eidx < url.length()) {
+                    if (url.charAt(eidx) == '&') {
+                        break;
+                    }
+                    eidx ++;
                 }
-                eidx ++;
+                return url.substring(sidx, eidx);
             }
-            return url.substring(sidx, eidx);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
         return null;
     }

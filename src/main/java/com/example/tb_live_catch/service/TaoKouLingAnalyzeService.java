@@ -6,9 +6,10 @@ public interface TaoKouLingAnalyzeService {
 
     /**
      * 通过淘口令解析直播id
-     * @param taokoulingStr
+     * @param tkl
      * @return
      */
-    String analyzeToLiveId(String taokoulingStr) throws IOException;
+    String analyzeToLiveId(String tkl);
+
 
 }

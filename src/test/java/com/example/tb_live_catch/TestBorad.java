@@ -33,8 +33,8 @@ public class TestBorad {
     }
 
     @Test
-    public void test3() throws IOException {
-        System.out.println(taoKouLingAnalyzeService.analyzeToLiveId("￥03v01bJXhg8￥"));
+    public void test3() {
+        System.out.println(taoKouLingAnalyzeService.analyzeToLiveId("￥0payYBN6E71￥"));
     }
 
 }
