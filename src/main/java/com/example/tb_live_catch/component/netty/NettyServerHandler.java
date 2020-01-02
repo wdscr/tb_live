@@ -21,6 +21,8 @@ public class NettyServerHandler extends SimpleChannelInboundHandler<DatagramPack
 
     private static Map<String, BufferedOutputStream> channelMap = new ConcurrentHashMap<>();
 
+    private static Map<String, StringBuilder> channelTran = new ConcurrentHashMap<>();
+
     private static Map<String, Long> channelTimeOutMap = new ConcurrentHashMap<>();
 
     /**
