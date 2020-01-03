@@ -9,3 +9,9 @@ taokouling:
 ffmpeg:
   path: ${FFMPEG_PATH}
   tmp-dir: ${FFMPEG_TMP_DIR}
+
+asr:
+  host: ${ASR_HOST}
+  port: ${ASR_PORT}
+  username: ${ASR_USERNAME}
+  password: ${ASR_PASSWORD}
