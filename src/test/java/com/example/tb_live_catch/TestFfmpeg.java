@@ -29,8 +29,8 @@ public class TestFfmpeg {
         String mp4File = "C:\\Users\\Zzz\\Desktop\\test2.mp4";
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -y -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
 //                " -vn -ar 16000 -ac 1 -ab 128k -acodec pcm_alaw -f wav udp://127.0.0.1:9999?tag=hello";
-        String command = "D:\\ffmpeg\\bin\\ffmpeg -y -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
-                " -vn -ar 16000 -ac 1 -f wav -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
+        String command = "D:\\ffmpeg\\bin\\ffmpeg -i C:\\Users\\Xxx\\Desktop\\242334423281.mp4" +
+                " -ar 8000 -ac 2 -acodec pcm_s16le -f wav  -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/b5060d8a-e3ae-4304-a0e2-d0bd36f66489_liveng-270p.flv?auth_key=1580226605-0-0-b5660eae668821be0e792a8d3ea99176
 //        -c copy C:\\Users\\Zzz\\Desktop\\test123.flv";
         Process process = Runtime.getRuntime().exec(command);
