@@ -9,7 +9,7 @@ public interface TaoKouLingAnalyzeService {
      * @param tkl
      * @return
      */
-    String analyzeToLiveId(String tkl);
+    String getSourceUrl(String tkl);
 
 
 }

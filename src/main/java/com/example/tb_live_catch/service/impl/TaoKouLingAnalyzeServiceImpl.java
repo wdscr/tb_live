@@ -1,6 +1,7 @@
 package com.example.tb_live_catch.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.example.tb_live_catch.service.LiveUrlCatchService;
 import com.example.tb_live_catch.service.TaoKouLingAnalyzeService;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -9,6 +10,7 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -24,8 +26,11 @@ public class TaoKouLingAnalyzeServiceImpl implements TaoKouLingAnalyzeService {
     @Value("${taokouling.api}")
     private String api;
 
+    @Autowired
+    LiveUrlCatchService liveUrlCatchService;
+
     @Override
-    public String analyzeToLiveId(String tkl) {
+    public String getSourceUrl(String tkl) {
 
         try {
             CloseableHttpClient client = HttpClients.createDefault();
@@ -47,15 +52,28 @@ public class TaoKouLingAnalyzeServiceImpl implements TaoKouLingAnalyzeService {
             JSONObject responseJson = JSONObject.parseObject(responseJsonStr);
             if (responseJson.getInteger("code") != null && responseJson.getInteger("code") == 1) {
                 String url = responseJson.getString("url");
-                int sidx = url.indexOf("?id=") + 4;
-                int eidx = sidx;
-                while (eidx < url.length()) {
-                    if (url.charAt(eidx) == '&') {
-                        break;
+                if (url.indexOf("live.html") > 0) {
+                    int sidx = url.indexOf("id=") + 3;
+                    int eidx = sidx;
+                    while (eidx < url.length()) {
+                        if (url.charAt(eidx) == '&') {
+                            break;
+                        }
+                        eidx ++;
                     }
-                    eidx ++;
+                    String id = url.substring(sidx, eidx);
+                    return liveUrlCatchService.getLiveUri(id);
+                } else {
+                    int sidx = url.indexOf("videoUrl=") + 9;
+                    int eidx = sidx;
+                    while (eidx < url.length()) {
+                        if (url.charAt(eidx) == '&') {
+                            break;
+                        }
+                        eidx ++;
+                    }
+                    return  url.substring(sidx, eidx);
                 }
-                return url.substring(sidx, eidx);
             }
         } catch (IOException e) {
             e.printStackTrace();

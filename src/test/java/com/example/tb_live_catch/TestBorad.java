@@ -1,6 +1,6 @@
 package com.example.tb_live_catch;
 
-import com.example.tb_live_catch.service.LiveCatchService;
+import com.example.tb_live_catch.service.LiveUrlCatchService;
 import com.example.tb_live_catch.service.TaoKouLingAnalyzeService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,7 +12,7 @@ import java.io.IOException;
 public class TestBorad {
 
     @Autowired
-    LiveCatchService liveUriCatchService;
+    LiveUrlCatchService liveUriCatchService;
 
     @Autowired
     TaoKouLingAnalyzeService taoKouLingAnalyzeService;
@@ -34,7 +34,7 @@ public class TestBorad {
 
     @Test
     public void test3() {
-        System.out.println(taoKouLingAnalyzeService.analyzeToLiveId("￥0payYBN6E71￥"));
+        System.out.println(taoKouLingAnalyzeService.getSourceUrl("￥0payYBN6E71￥"));
     }
 
 }

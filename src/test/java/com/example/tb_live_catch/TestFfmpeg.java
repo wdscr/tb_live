@@ -1,6 +1,7 @@
 package com.example.tb_live_catch;
 
 import com.example.tb_live_catch.service.ASRService;
+import com.example.tb_live_catch.service.FfmpegService;
 import com.example.tb_live_catch.thrift.asr.ASRResult;
 import com.example.tb_live_catch.thrift.asr.ASRServ;
 import com.example.tb_live_catch.thrift.asr.ASRWrite;
@@ -28,7 +29,7 @@ public class TestFfmpeg {
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -y -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
 //                " -vn -ar 16000 -ac 1 -ab 128k -acodec pcm_alaw -f wav udp://127.0.0.1:9999?tag=hello";
         String command = "D:\\ffmpeg\\bin\\ffmpeg -y -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
-                " -vn -ar 16000 -ac 1 -f wav udp://127.0.0.1:9999?tag=hello";
+                " -vn -ar 16000 -ac 1 -f wav -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/b5060d8a-e3ae-4304-a0e2-d0bd36f66489_liveng-270p.flv?auth_key=1580226605-0-0-b5660eae668821be0e792a8d3ea99176
 //        -c copy C:\\Users\\Zzz\\Desktop\\test123.flv";
         Process process = Runtime.getRuntime().exec(command);
@@ -106,7 +107,7 @@ public class TestFfmpeg {
                     String line = null;
                     while ((len = is.read(bytes)) != -1) {
                         fos.write(bytes, 0, len);
-                        log.info("read: " +len);
+//                        log.info("read: " +len);
                     }
                 } catch (IOException e) {
                    log.info(e.getMessage());
@@ -185,6 +186,8 @@ public class TestFfmpeg {
             e.printStackTrace();
         }
     }
+
+
 }
 
 class StreamDump implements Runnable {

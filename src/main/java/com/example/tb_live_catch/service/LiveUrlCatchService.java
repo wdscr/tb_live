@@ -26,7 +26,7 @@ import java.net.URL;
 import java.util.*;
 
 @Service
-public class LiveCatchService {
+public class LiveUrlCatchService {
 
     public void liveCatch(String uri) throws IOException {
 
