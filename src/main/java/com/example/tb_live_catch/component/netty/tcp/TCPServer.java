@@ -1,5 +1,6 @@
 package com.example.tb_live_catch.component.netty.tcp;
 
+import com.example.tb_live_catch.service.ASRService;
 import io.netty.bootstrap.ServerBootstrap;
 import io.netty.channel.*;
 import io.netty.channel.nio.NioEventLoopGroup;
@@ -8,6 +9,7 @@ import io.netty.channel.socket.nio.NioServerSocketChannel;
 import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -25,6 +27,9 @@ public class TCPServer {
     private final EventLoopGroup bossGroup = new NioEventLoopGroup(1);
     //处理hadnler的工作线程，其实也就是处理IO读写 。线程数据默认为 CPU 核心数乘以2
     private final EventLoopGroup workerGroup = new NioEventLoopGroup(8);
+
+    @Autowired
+    ASRService asrService;
 
     @PostConstruct
     public void start() throws InterruptedException {
@@ -49,7 +54,7 @@ public class TCPServer {
 //                                log.info(ctx.channel().id().asLongText() + " close");
 //                            }
 //                        });
-                pipeline.addLast(new SocketByteHandler());
+                pipeline.addLast(new SocketByteHandler(asrService));
             }
         });
         //标识当服务器请求处理线程全满时，用于临时存放已完成三次握手的请求的队列的最大长度
