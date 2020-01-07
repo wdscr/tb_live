@@ -1,7 +1,5 @@
 package com.example.tb_live_catch;
 
-import com.example.tb_live_catch.service.ASRService;
-import com.example.tb_live_catch.service.FfmpegService;
 import com.example.tb_live_catch.thrift.asr.ASRResult;
 import com.example.tb_live_catch.thrift.asr.ASRServ;
 import com.example.tb_live_catch.thrift.asr.ASRWrite;
@@ -11,15 +9,11 @@ import org.apache.thrift.protocol.TBinaryProtocol;
 import org.apache.thrift.protocol.TProtocol;
 import org.apache.thrift.transport.TSocket;
 import org.apache.thrift.transport.TTransport;
-import org.apache.thrift.transport.TTransportException;
-import org.junit.Before;
 import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
 
 import java.io.*;
 import java.nio.ByteBuffer;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.UUID;
 
 @Slf4j
@@ -28,16 +22,21 @@ public class TestFfmpeg {
     public static void main(String[] args) throws IOException, InterruptedException {
         String mp4File = "C:\\Users\\Zzz\\Desktop\\test2.mp4";
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -y -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
-//                " -vn -ar 16000 -ac 1 -ab 128k -acodec pcm_alaw -f wav udp://127.0.0.1:9999?tag=hello";
-        String command = "D:\\ffmpeg\\bin\\ffmpeg -i C:\\Users\\Xxx\\Desktop\\242334423281.mp4" +
-                " -ar 8000 -ac 2 -acodec pcm_s16le -f wav  -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
-//        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/b5060d8a-e3ae-4304-a0e2-d0bd36f66489_liveng-270p.flv?auth_key=1580226605-0-0-b5660eae668821be0e792a8d3ea99176
-//        -c copy C:\\Users\\Zzz\\Desktop\\test123.flv";
+////                " -vn -ar 16000 -ac 1 -ab 128k -acodec pcm_alaw -f wav udp://127.0.0.1:9999?tag=hello";
+//        String command = "D:\\ffmpeg2\\bin\\ffmpeg -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
+//                " -f wav -bitexact -acodec pcm_s16le -ar 8000 -ac 2 -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi" http://liveng.alicdn.com/mediaplatform/88be7682-a6c0-492a-ac63-a3ffd97ba735_liveng-270p.flv?auth_key=1580915542-0-0-7a01285e37df75163ab43f0c43bf0ebe;
+        String command = "D:\\ffmpeg2\\bin\\ffmpeg -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
+                " -vn -f wav -bitexact -acodec pcm_s16le -ar 16000 -ac 1 -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
+//        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/88be7682-a6c0-492a-ac63-a3ffd97ba735_liveng-270p.flv?auth_key=1580915542-0-0-7a01285e37df75163ab43f0c43bf0ebe" +
+//        " -c copy C:\\Users\\Zzz\\Desktop\\test123.flv";
         Process process = Runtime.getRuntime().exec(command);
         new Thread(new StreamDump(process.getErrorStream()), "error stream").start();
         new Thread(new StreamDump(process.getInputStream()), "output stream").start();
         try {
+
             process.waitFor();
+
+
         } catch (InterruptedException e) {
             e.printStackTrace();
         }

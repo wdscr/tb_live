@@ -4,18 +4,17 @@ import com.alibaba.fastjson.JSONObject;
 import com.example.tb_live_catch.service.ASRService;
 import com.example.tb_live_catch.thrift.asr.ASRResult;
 import com.example.tb_live_catch.thrift.asr.ASRServ;
+import com.example.tb_live_catch.thrift.asr.ASRWrite;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.ChannelInboundHandlerAdapter;
 import io.netty.util.AttributeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.thrift.TException;
 
 import java.io.FileOutputStream;
 import java.nio.ByteBuffer;
 import java.time.LocalTime;
-import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -51,22 +50,25 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
         ASRServ.Client client = ASRClinetMap.get(shortId);
 //        client.ASR_audio_write(ByteBuffer.wrap(new byte[]{0}), 4);
         ASRResult rs = null;
-                StringBuilder sb = new StringBuilder();
-                    do {
-                       rs = client.ASR_get_result();
-                        if (rs !=null && StringUtils.isNotBlank(rs.getText())) {
-                            sb.append(rs.getText());
-                            if(rs.getText().matches("。|！|？")) {
-                                sb.append("\n");
+        StringBuilder sb = new StringBuilder();
+        log.info("========================end===================");
 
-                            }
-                            log.info("=========================================");
-                            log.info(sb.toString());
-                            log.info("=========================================");
-                        }
-                    } while (rs == null || rs.getRsltStatus() == 2 || rs.getRsltStatus() == 0);
+        do {
+            rs = client.ASR_get_result();
+            log.info(JSONObject.toJSONString(rs));
+            if (rs != null && StringUtils.isNotBlank(rs.getText())) {
+                sb.append(rs.getText());
+                if (rs.getText().matches("。|！|？")) {
+                    sb.append("\n");
 
-                    fileMap.get(shortId).close();
+                }
+                log.info("=========================================");
+                log.info(rs.getText());
+            }
+        } while (rs == null || rs.getRsltStatus() == 2 || rs.getRsltStatus() == 0);
+        log.info("========================end===================");
+
+        fileMap.get(shortId).close();
     }
 
     @Override
@@ -81,22 +83,31 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
         ASRServ.Client asrClient = ASRClinetMap.get(shortId);
         FileOutputStream fos = fileMap.get(shortId);
         if (asrClient == null) {
+            System.out.print("-");
 
-            fos = new FileOutputStream("C:\\Users\\Xxx\\Desktop\\test.wav");
+//            bytes = Arrays.copyOfRange(bytes, 44, bytes.length);
+//            byteBuffer = ByteBuffer.wrap(bytes);
+            fos = new FileOutputStream("C:\\Users\\Zzz\\Desktop\\test.mp3");
             fileMap.put(shortId, fos);
             asrClient = asrService.create();
             ASRClinetMap.put(shortId, asrClient);
             streamSizeMap.put(shortId, Long.valueOf(bytes.length));
             asrClient.ASR_audio_write(byteBuffer, 1);
             ASRServ.Client finalAsrClient = asrClient;
-            (new Thread(() -> {
-                log.info("start new thread ...");
+//            (new Thread(() -> {
+//                log.info("start new thread ...");
+//                try {
+//                    Thread.sleep(5000);
+//                } catch (InterruptedException e) {
+//                    e.printStackTrace();
+//                }
 //                StringBuilder sb = new StringBuilder();
 //                try {
 //                    ASRResult rs = null;
 //                    Long start = 0L;
 //                    do {
 //                       rs = finalAsrClient.ASR_get_result();
+//                       log.info("rs: " + JSONObject.toJSONString(rs));
 //                        if (rs !=null && StringUtils.isNotBlank(rs.getText())) {
 //                            sb.append(rs.getText());
 //                            if(rs.getText().matches("。|！|？")) {
@@ -111,21 +122,54 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 //                            log.info(sb.toString());
 //                            log.info("=========================================");
 //                        }
-//                    } while (rs == null || rs.getRsltStatus() == 2);
+//                    } while (rs == null || rs.getRsltStatus() == 2 || rs.getRsltStatus() == 0);
 //
 //                } catch (TException e) {
 //                    log.error(e.getMessage());
 //                }
-            })).start();
+//            })).start();
         } else {
             streamSizeMap.put(shortId, streamSizeMap.get(shortId) + bytes.length);
-            asrClient.ASR_audio_write(byteBuffer, 2);
+            ASRWrite write = asrClient.ASR_audio_write(byteBuffer, 2);
+            switch (write.getEpStatus()) {
+                case 0 : log.info("还没有检测到音频的前端点。");
+                    break;
+                case 1 : log.info("已经检测到了音频前端点，正在进行正常的音频处理。");
+                    break;
+                case 3 : log.info("检测到音频的后端点，后继的音频会被忽略。");
+                    ASRResult rs = asrClient.ASR_get_result();
+                    if (rs != null && StringUtils.isNotBlank(rs.getText())) {
+                        log.info("=========================================");
+                        log.info(rs.getText());
+                    }
+                    asrClient.ASR_end_session();
+                    asrClient = asrService.create();
+                    asrClient.ASR_audio_write(byteBuffer, 1);
+                    log.info("新建client...");
+                    ASRClinetMap.put(shortId, asrClient);
+                    break;
+                case 4 : log.info("超时。");
+                    break;
+                case 5 : log.info("出现错误。");
+                    break;
+                case 6 : log.info("音频过大。");
+                    break;
+
+            }
+            ASRResult rs = asrClient.ASR_get_result();
+//            System.out.print(".");
+            if (rs != null && StringUtils.isNotBlank(rs.getText())) {
+                log.info("=========================================");
+                log.info(rs.getText());
+//                log.info("=========================================");
+            }
+
         }
 
         fos.write(bytes, 0, bytes.length);
         fos.flush();
 
-        log.info("Client put:" + bytes.length + Arrays.toString(bytes));
+//        log.info("Client put:" + bytes.length + Arrays.toString(bytes));
         // 释放资源，这行很关键 
         result.release();
     }

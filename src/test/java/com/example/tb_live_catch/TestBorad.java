@@ -1,5 +1,6 @@
 package com.example.tb_live_catch;
 
+import com.example.tb_live_catch.service.LiveTransformService;
 import com.example.tb_live_catch.service.LiveUrlCatchService;
 import com.example.tb_live_catch.service.TaoKouLingAnalyzeService;
 import org.junit.jupiter.api.Test;
@@ -17,10 +18,14 @@ public class TestBorad {
     @Autowired
     TaoKouLingAnalyzeService taoKouLingAnalyzeService;
 
+    @Autowired
+    LiveTransformService liveTransformService;
+
+
     @Test
     public void test() {
         try {
-            String sign = liveUriCatchService.getLiveUri("249658079503");
+            String sign = liveUriCatchService.getLiveUri("250041692807");
             System.out.println(sign);
         } catch (IOException e) {
             e.printStackTrace();
