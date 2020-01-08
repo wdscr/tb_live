@@ -25,8 +25,8 @@ public class TestFfmpeg {
 ////                " -vn -ar 16000 -ac 1 -ab 128k -acodec pcm_alaw -f wav udp://127.0.0.1:9999?tag=hello";
 //        String command = "D:\\ffmpeg2\\bin\\ffmpeg -i https://cloud.video.taobao.com/play/u/1759494485/p/1/e/6/t/1/d/ld/242334423281.mp4" +
 //                " -f wav -bitexact -acodec pcm_s16le -ar 8000 -ac 2 -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi" http://liveng.alicdn.com/mediaplatform/88be7682-a6c0-492a-ac63-a3ffd97ba735_liveng-270p.flv?auth_key=1580915542-0-0-7a01285e37df75163ab43f0c43bf0ebe;
-        String command = "D:\\ffmpeg\\bin\\ffmpeg -i C:\\Users\\Xxx\\Desktop\\242334423281.mp4" +
-                " -vn -f wav  -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
+        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/84581a46-d5e4-46cf-8d0d-86a8c605a610_liveng-270p.flv?auth_key=1581001738-0-0-8d1ac421e67ee8aeb54e46ab2758c07d" +
+                " -vn -f wav -bitexact -acodec pcm_s16le -ar 8000 -ac 1  -rtsp_transport tcp tcp://127.0.0.1:9999?tkl=sldjfaosdi";
 //        String command = "D:\\ffmpeg\\bin\\ffmpeg -i http://liveng.alicdn.com/mediaplatform/88be7682-a6c0-492a-ac63-a3ffd97ba735_liveng-270p.flv?auth_key=1580915542-0-0-7a01285e37df75163ab43f0c43bf0ebe" +
 //        " -c copy C:\\Users\\Zzz\\Desktop\\test123.flv";
         Process process = Runtime.getRuntime().exec(command);

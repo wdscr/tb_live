@@ -72,13 +72,24 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 //
 //            bytes = Arrays.copyOfRange(bytes, 44, bytes.length);
 //            byteBuffer = ByteBuffer.wrap(bytes);
-            fos = new FileOutputStream("C:\\Users\\Xxx\\Desktop\\test.wav");
+            fos = new FileOutputStream("C:\\Users\\Zzz\\Desktop\\test.wav");
             fileMap.put(shortId, fos);
             asrClient = asrService.create();
             ASRClinetMap.put(shortId, asrClient);
             streamSizeMap.put(shortId, Long.valueOf(bytes.length));
             asrClient.ASR_audio_write(byteBuffer, 1);
+
             ASRServ.Client finalAsrClient = asrClient;
+//            (new Thread(() -> {
+//                try {
+//                    Thread.sleep(5000);
+//                    log.info("开启get线程...");
+//
+//                    logResult(finalAsrClient);
+//                } catch (TException | InterruptedException e) {
+//                    e.printStackTrace();
+//                }
+//            })).start();
         } else {
             streamSizeMap.put(shortId, streamSizeMap.get(shortId) + bytes.length);
             ASRWrite write = asrClient.ASR_audio_write(byteBuffer, 2);
@@ -87,18 +98,18 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
                     break;
                 case 1 : /*log.info("已经检测到了音频前端点，正在进行正常的音频处理。");*/
                     break;
-                case 3 : /*log.info("检测到音频的后端点，后继的音频会被忽略。");*/
+                case 3 : log.info("检测到音频的后端点，后继的音频会被忽略。");
                     logResult(asrClient);
                     asrClient = asrService.create();
                     asrClient.ASR_audio_write(byteBuffer, 1);
                     /*log.info("新建client...");*/
                     ASRClinetMap.put(shortId, asrClient);
                     break;
-                case 4 : /*log.info("超时。");*/
+                case 4 : log.info("超时。");
                     break;
-                case 5 : /*log.info("出现错误。");*/
+                case 5 : log.info("出现错误。");
                     break;
-                case 6 : /*log.info("音频过大。");*/
+                case 6 : log.info("音频过大。");
                     break;
 
             }

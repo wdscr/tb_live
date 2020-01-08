@@ -36,7 +36,7 @@ public class ASRService {
         transport.open();
         client.asr_init(username, password, "");
         client.ASR_create_session("sub=iat,domain=iat,language=zh_cn," +
-                "accent=mandarin,sample_rate=16000," +
+                "accent=mandarin,sample_rate=8000," +
                 "result_type=plain,result_encoding=utf8,vad_eos=999999", null);
         return client;
     }
