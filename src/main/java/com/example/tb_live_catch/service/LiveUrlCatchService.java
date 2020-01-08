@@ -86,7 +86,7 @@ public class LiveUrlCatchService {
 
         String jsonStr = responseStr.substring("mtopjsonp4(".length() + 1, responseStr.length()-1);
         JSONObject responseJson = JSONObject.parseObject(jsonStr);
-        System.out.println(responseJson.toJSONString());
+//        System.out.println(responseJson.toJSONString());
 
         if ("SUCCESS::调用成功".equals(responseJson.getJSONArray("ret").get(0))) {
             JSONObject data = responseJson.getJSONObject("data");

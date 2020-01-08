@@ -72,7 +72,7 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 //
 //            bytes = Arrays.copyOfRange(bytes, 44, bytes.length);
 //            byteBuffer = ByteBuffer.wrap(bytes);
-            fos = new FileOutputStream("C:\\Users\\Zzz\\Desktop\\test.wav");
+            fos = new FileOutputStream("C:\\Users\\Xxx\\Desktop\\test.wav");
             fileMap.put(shortId, fos);
             asrClient = asrService.create();
             ASRClinetMap.put(shortId, asrClient);
@@ -113,14 +113,12 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
                     break;
 
             }
-            ASRResult rs = asrClient.ASR_get_result();
-//            System.out.print(".");
-            if (rs != null && StringUtils.isNotBlank(rs.getText())) {
-//                log.info("=========================================");
-                log.info(rs.getText());
-//                log.info("=========================================");
+            for (int i=0; i<5; i++) {
+                ASRResult rs = asrClient.ASR_get_result();
+                if (rs != null && StringUtils.isNotBlank(rs.getText())) {
+                    log.info(rs.getText());
+                }
             }
-
         }
 
         fos.write(bytes, 0, bytes.length);
@@ -161,13 +159,27 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 
     private void logResult(ASRServ.Client asrClient) throws TException {
         ASRResult rs = null;
-        do {
+        int getTime = 15;
+        while (getTime-- > 0) {
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             rs = asrClient.ASR_get_result();
             if (rs != null && StringUtils.isNoneBlank(rs.getText())) {
-
                 log.info(rs.getText());
-
             }
-        } while (rs == null || rs.getRsltStatus() == 2 || rs.getRsltStatus() == 0 || rs.getErrorCode() != 0);
+        }
+//        do {
+//            rs = asrClient.ASR_get_result();
+//            if (rs != null && StringUtils.isNoneBlank(rs.getText())) {
+//
+//                log.info(rs.getText());
+//
+//            }
+//        } while (rs == null || rs.getRsltStatus() == 2 || rs.getRsltStatus() == 0 || rs.getErrorCode() != 0);
+//        rs = asrClient.ASR_get_result();
+//        log.info(rs.getText());
     }
 }

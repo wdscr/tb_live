@@ -51,7 +51,7 @@ public class TestBorad {
 
     @Test
     public void test3() {
-        System.out.println(taoKouLingAnalyzeService.getSourceUrl("￥hZup1c3G2Es￥"));
+        System.out.println(taoKouLingAnalyzeService.getSourceUrl("￥Mj2g1c7PghK￥"));
     }
 
 

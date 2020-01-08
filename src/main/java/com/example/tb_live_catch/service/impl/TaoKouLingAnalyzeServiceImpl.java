@@ -3,6 +3,7 @@ package com.example.tb_live_catch.service.impl;
 import com.alibaba.fastjson.JSONObject;
 import com.example.tb_live_catch.service.LiveUrlCatchService;
 import com.example.tb_live_catch.service.TaoKouLingAnalyzeService;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.methods.HttpPost;
@@ -62,7 +63,14 @@ public class TaoKouLingAnalyzeServiceImpl implements TaoKouLingAnalyzeService {
                         eidx ++;
                     }
                     String id = url.substring(sidx, eidx);
-                    return liveUrlCatchService.getLiveUri(id);
+                    String liveSourceJsonStr = liveUrlCatchService.getLiveUri(id);
+                    if (StringUtils.isNoneBlank(liveSourceJsonStr)) {
+                        JSONObject liveSourceJson = JSONObject.parseObject(liveSourceJsonStr);
+                        if (StringUtils.isNotBlank(liveSourceJson.getString("flvUrl"))) {
+                            return liveSourceJson.getString("flvUrl");
+                        }
+                    }
+                    return null;
                 } else {
                     int sidx = url.indexOf("videoUrl=") + 9;
                     int eidx = sidx;
