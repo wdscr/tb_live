@@ -23,6 +23,13 @@ import java.util.concurrent.ConcurrentHashMap;
 @Slf4j
 public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 
+    private static String HOME_PATH;
+
+    static {
+        HOME_PATH = System.getProperty("user.home");
+        log.info("USER HOME PATH:" + HOME_PATH);
+    }
+
     ASRService asrService;
 
     Map<String, ASRServ.Client> ASRClinetMap = new ConcurrentHashMap<>();
@@ -72,7 +79,7 @@ public class SocketByteHandler extends ChannelInboundHandlerAdapter {
 //
 //            bytes = Arrays.copyOfRange(bytes, 44, bytes.length);
 //            byteBuffer = ByteBuffer.wrap(bytes);
-            fos = new FileOutputStream("C:\\Users\\Xxx\\Desktop\\test.wav");
+            fos = new FileOutputStream(HOME_PATH + "\\Desktop\\test.wav");
             fileMap.put(shortId, fos);
             asrClient = asrService.create();
             ASRClinetMap.put(shortId, asrClient);

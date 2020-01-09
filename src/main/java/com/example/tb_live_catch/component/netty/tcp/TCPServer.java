@@ -10,6 +10,7 @@ import io.netty.handler.timeout.IdleStateEvent;
 import io.netty.handler.timeout.IdleStateHandler;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
@@ -20,7 +21,9 @@ import java.util.concurrent.TimeUnit;
 public class TCPServer {
 
     //端口号
-    private int port=9999;
+    @Value("${tran-server.port:13570}")
+    private int port;
+
     //服务器运行状态
     private volatile boolean isRunning = false;
     //处理Accept连接事件的线程，这里线程数设置为1即可，netty处理链接事件默认为单线程，过度设置反而浪费cpu资源

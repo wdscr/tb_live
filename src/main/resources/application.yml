@@ -6,6 +6,9 @@ taokouling:
   appkey: MXDTGTjRNW
   api: https://api.taokouling.com/tkl/tkljm
 
+tran-server:
+  port: 13570
+
 ffmpeg:
   path: ${FFMPEG_PATH}
   tmp-dir: ${FFMPEG_TMP_DIR}

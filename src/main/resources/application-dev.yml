@@ -13,12 +13,12 @@ FFMPEG_TMP_DIR: "D:\ffmpeg\tmp"
 #ASR_USERNAME: aiyin_zhijian
 #ASR_PASSWORD: aiyin_zhijian123456#
 
-ASR_HOST: 172.18.26.142
-ASR_PORT: 9092
-ASR_USERNAME: aiyin_zhijian
-ASR_PASSWORD: aiyin_zhijian123456#
-
-#ASR_HOST: 39.108.172.246
+#ASR_HOST: 172.18.26.142
 #ASR_PORT: 9092
 #ASR_USERNAME: aiyin_zhijian
 #ASR_PASSWORD: aiyin_zhijian123456#
+
+ASR_HOST: 39.108.172.246
+ASR_PORT: 9092
+ASR_USERNAME: aiyin_zhijian
+ASR_PASSWORD: aiyin_zhijian123456#
