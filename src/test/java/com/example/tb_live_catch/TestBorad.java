@@ -51,7 +51,7 @@ public class TestBorad {
 
     @Test
     public void test3() {
-        System.out.println(taoKouLingAnalyzeService.getSourceUrl("￥Mj2g1c7PghK￥"));
+        System.out.println(taoKouLingAnalyzeService.getSourceUrl("￥R4Jg1cQBOBd￥"));
     }
 
 
@@ -151,7 +151,7 @@ public class TestBorad {
     }
 
     public static void main(String[] args) {
-        System.out.println(Integer.toHexString(939246-44));
+        System.out.println(Integer.toHexString(120589596-36));
     }
 
 
